@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<XmlShell>
+	<ShellCommand
+		Id="cd"
+		Type="default"
+		Summary="Navigates to a directory">
+	</ShellCommand>
+	<ShellCommand
+		Id="help"
+		Type="default"
+		Summary="Shows all commands">
+	</ShellCommand>
+	<ShellCommand
+		Id="dir"
+		Type="default"
+		Summary="Shows all top directorys">
+	</ShellCommand>
+	<ShellCommand
+		Id="bios"
+		Type="custom"
+		Summary="Restart into bios">
+	</ShellCommand>
+	<ShellCommand
+		Id="clear"
+		Type="custom"
+		Summary="Cleans the console">
+	</ShellCommand>
+	<ShellCommand
+		Id="echo"
+		Type="default"
+		Summary="Outputs text to the console">
+	</ShellCommand>
+	<ShellCommand
+		Id="ping"
+		Type="default"
+		Summary="Ping a website (is a website down?)">
+	</ShellCommand>
+	<ShellCommand
+		Id="ipconfig"
+		Type="custom"
+		Summary="shows your ips">
+	</ShellCommand>
+	<ShellCommand
+		Id="tree"
+		Type="default"
+		Summary="Shows the directory architecture">
+	</ShellCommand>
+	<ShellCommand
+		Id="note"
+		Type="custom"
+		Summary="Creates a Note on the desktop">
+	</ShellCommand>
+	<ShellCommand
+		Id="report"
+		Type="custom"
+		Summary="Send an Email with bug reports">
+	</ShellCommand>
+	<ShellCommand
+		Id="Mode"
+		Type="custom"
+		Summary="Switch app mode">
+	</ShellCommand>
+</XmlShell>
