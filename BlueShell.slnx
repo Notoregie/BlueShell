@@ -1,3 +1,9 @@
 <Solution>
   <Project Path="BlueShell/BlueShell.csproj" />
+  <Project Path="BlueShell.Core/BlueShell.Core.csproj" />
+  <Folder Name="/Solution Items/">
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="BlueShell.Application/BlueShell.Application.csproj" />
+  <File Path="README.md" />
 </Solution>

@@ -4,21 +4,20 @@ using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 
-namespace BlueShell.Helper
+namespace BlueShell.Application.Helper
 {
     public static class XmlHelper
     {
-        public static T? ConvertXml<T>() where T: class, new()
+        public static T? ConvertXml<T>() where T : class, new()
         {
-            if (!FindXml(typeof(T).Name, out string configFile)) return new T();
+            if (!FindXml(typeof(T).Name, out string configFile))
+                return new T();
 
             try
             {
-            XmlSerializer serializer = new XmlSerializer(typeof(T));
-                using (FileStream fs = new FileStream(configFile, FileMode.Open))
-                {
-                    return (T)serializer.Deserialize(fs);
-                }
+                XmlSerializer serializer = new(typeof(T));
+                using FileStream fs = new(configFile, FileMode.Open);
+                return (T)serializer.Deserialize(fs)!;
             }
             catch (XmlException ex)
             {
@@ -30,14 +29,13 @@ namespace BlueShell.Helper
                 Console.WriteLine(ex.Message);
                 return new T();
             }
-            
         }
 
-        static bool FindXml(string configFile, out string configFilePath)
+        private static bool FindXml(string configFile, out string configFilePath)
         {
-            string configPath = @"C:\Users\kevin\source\repos\BlueShell\BlueShell\Configs\";
+            string configPath = Path.Combine(AppContext.BaseDirectory, "Configs");
             if (configFile.StartsWith("Xml"))
-                configFile = configFile.Remove(0, 3);
+                configFile = configFile[3..];
 
             configFilePath = Path.Combine(configPath, configFile + ".xml");
             return File.Exists(configFilePath);

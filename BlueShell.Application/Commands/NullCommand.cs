@@ -1,13 +1,13 @@
-﻿using BlueShell.Interfaces;
+using BlueShell.Core.State;
 using System;
 using System.Collections.Generic;
 using System.Text;
 
 namespace BlueShell.Commands
 {
-    public class NullCommand : ShellCommandBase
+    public sealed class NullCommand : ShellCommandBase
     {
-        protected override void ExecuteLogic(ref string? dir, params string[]? args)
+        protected override void ExecuteLogic(ShellContext context, string[] args)
         {
             Console.WriteLine("NullCommand Executed.");
         }

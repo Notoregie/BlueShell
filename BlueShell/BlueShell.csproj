@@ -5,7 +5,13 @@
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
-	<ApplicationIcon>Assets\BlueShell.ico</ApplicationIcon>
+    <ApplicationIcon>Assets\BlueShell.ico</ApplicationIcon>
   </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BlueShell.Core\BlueShell.Core.csproj" />
+    <ProjectReference Include="..\BlueShell.Application\BlueShell.Application.csproj" />
+    <None Update="Configs\Shell.xml" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
 
 </Project>

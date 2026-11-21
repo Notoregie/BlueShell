@@ -1,4 +1,5 @@
-﻿using BlueShell.Interfaces;
+using BlueShell.Core.Interfaces;
+using BlueShell.Core.State;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,32 +9,36 @@ namespace BlueShell.Commands
     public abstract class ShellCommandBase : IShellCommand
     {
         protected virtual int MinArgs => 0;
-        public void Execute(ref string? dir, params string[]? args)
+
+        public void Execute(ShellContext context, params string[]? args)
         {
+            args ??= Array.Empty<string>();
+
             if (args.Length == 1 && args[0] == "?")
             {
                 PrintHelp();
                 return;
             }
-            if (!EnsureArgs(args)) 
+
+            if (!EnsureArgs(args))
                 return;
 
-            ExecuteLogic(ref dir, args);
+            ExecuteLogic(context, args);
         }
+
         protected virtual void PrintHelp()
         {
             Console.WriteLine("No help implemented");
         }
 
-
-        protected virtual void ExecuteLogic(ref string? dir, string[]? args)
+        protected virtual void ExecuteLogic(ShellContext context, string[] args)
         {
             Console.WriteLine("No execute implemented");
         }
 
-        bool EnsureArgs(string[] args)
+        private bool EnsureArgs(string[] args)
         {
-            if (MinArgs == 0) 
+            if (MinArgs == 0)
                 return true;
 
             if (args.Length < MinArgs)
@@ -41,11 +46,13 @@ namespace BlueShell.Commands
                 Console.WriteLine("Too few arguments. Necessary arguments: " + MinArgs);
                 return false;
             }
-            if (args.Any(a => string.IsNullOrWhiteSpace(a)))
+
+            if (args.Any(string.IsNullOrWhiteSpace))
             {
                 Console.WriteLine("Arguments must not be empty.");
                 return false;
             }
+
             return true;
         }
     }

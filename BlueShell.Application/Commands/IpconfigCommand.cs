@@ -1,21 +1,21 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using System.Net;
-using System.Text;
+using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Threading.Tasks;
+using BlueShell.Core.State;
 
 namespace BlueShell.Commands
 {
     public sealed class IpconfigCommand : ShellCommandBase
     {
-        protected override void ExecuteLogic(ref string? dir, params string[]? args)
+        protected override void ExecuteLogic(ShellContext context, string[] args)
         {
             Console.WriteLine("Ips are loading...." + Environment.NewLine);
-            Task.Run(() => IpConfig()).Wait();
+            Task.Run(IpConfig).Wait();
         }
 
-        async Task IpConfig()
+        private async Task IpConfig()
         {
             var ipv4 = GetIPv4();
             var ipv6 = GetIPv6();
@@ -26,19 +26,20 @@ namespace BlueShell.Commands
             Console.WriteLine($"PublicIP:. :{publicIP}");
         }
 
-        async Task<string?> GetPublicIp()
+        private static async Task<string?> GetPublicIp()
         {
-            HttpClient client = new HttpClient();
+            using HttpClient client = new();
             return await client.GetStringAsync("https://api.ipify.org");
         }
 
-        IPAddress? GetIPv4()
+        private static IPAddress? GetIPv4()
         {
             return Dns.GetHostEntry(Dns.GetHostName())
                 .AddressList
                 .FirstOrDefault(ip => ip.AddressFamily == AddressFamily.InterNetwork && !IPAddress.IsLoopback(ip));
         }
-        IPAddress? GetIPv6()
+
+        private static IPAddress? GetIPv6()
         {
             return Dns.GetHostEntry(Dns.GetHostName())
                 .AddressList
