@@ -1,4 +1,5 @@
 using BlueShell.Core.Interfaces;
+using BlueShell.Core.Models;
 using BlueShell.Core.State;
 using System;
 using System.Collections.Generic;
@@ -10,20 +11,18 @@ namespace BlueShell.Commands
     {
         protected virtual int MinArgs => 0;
 
-        public void Execute(ShellContext context, params string[]? args)
+        public void Execute(ShellContext context, CommandLine commandLine)
         {
-            args ??= Array.Empty<string>();
-
-            if (args.Length == 1 && args[0] == "?")
+            if (commandLine.HelpRequested)
             {
                 PrintHelp();
                 return;
             }
 
-            if (!EnsureArgs(args))
+            if (!EnsureArgs(commandLine.Arguments))
                 return;
 
-            ExecuteLogic(context, args);
+            ExecuteLogic(context, commandLine.Arguments);
         }
 
         protected virtual void PrintHelp()

@@ -39,7 +39,7 @@ internal static class Program
         if (XmlShell.Instance.CommandMap.TryGetValue(commandLine.Command, out IShellCommand? shellCommand))
         {
             Console.WriteLine();
-            shellCommand.Execute(context, commandLine.Arguments);
+            shellCommand.Execute(context, commandLine);
         }
         else
         {

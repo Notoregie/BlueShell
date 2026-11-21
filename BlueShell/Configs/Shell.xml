@@ -56,7 +56,7 @@
 		Summary="Send an Email with bug reports">
 	</ShellCommand>
 	<ShellCommand
-		Id="Mode"
+		Id="mode"
 		Type="custom"
 		Summary="Switch app mode">
 	</ShellCommand>
