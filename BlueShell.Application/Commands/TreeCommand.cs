@@ -1,15 +1,20 @@
+using BlueShell.Core.Models;
+using BlueShell.Core.State;
 using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Channels;
-using BlueShell.Core.State;
 
 namespace BlueShell.Commands
 {
 
     public sealed class TreeCommand : ShellCommandBase
     {
-        protected override void PrintHelp() => Console.WriteLine("Nothing");
+        protected override void PrintHelp(CommandMetadata metadata)
+        {
+            Console.WriteLine("Usage: tree");
+            base.PrintHelp(metadata);
+        }
 
         protected override void ExecuteLogic(ShellContext context, string[] args)
         {

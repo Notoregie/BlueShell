@@ -3,17 +3,17 @@
 	<ShellCommand
 		Id="cd"
 		Type="default"
-		Summary="Navigates to a directory">
+		Summary="Changes the current working directory.">
 	</ShellCommand>
 	<ShellCommand
 		Id="help"
 		Type="default"
-		Summary="Shows all commands">
+		Summary="Lists all registered commands.">
 	</ShellCommand>
 	<ShellCommand
 		Id="dir"
 		Type="default"
-		Summary="Shows all top directorys">
+		Summary="Lists top-level directories.">
 	</ShellCommand>
 	<ShellCommand
 		Id="bios"
@@ -23,32 +23,34 @@
 	<ShellCommand
 		Id="clear"
 		Type="custom"
-		Summary="Cleans the console">
+		Summary="Clears the console screen.">
 	</ShellCommand>
 	<ShellCommand
 		Id="echo"
 		Type="default"
-		Summary="Outputs text to the console">
+		Summary="Writes the provided text to the console.">
 	</ShellCommand>
 	<ShellCommand
 		Id="ping"
 		Type="default"
-		Summary="Ping a website (is a website down?)">
+		Summary="Sends a ping request to a hostname or IP address.">
 	</ShellCommand>
 	<ShellCommand
 		Id="ipconfig"
 		Type="custom"
-		Summary="shows your ips">
+		Summary="Shows your IP configuration">
 	</ShellCommand>
 	<ShellCommand
 		Id="tree"
 		Type="default"
-		Summary="Shows the directory architecture">
+		Summary="Displays the directory tree recursively.">
 	</ShellCommand>
+	
+	
 	<ShellCommand
 		Id="note"
 		Type="custom"
-		Summary="Creates a Note on the desktop">
+		Summary="Creates a .txt file with content on the desktop.">
 	</ShellCommand>
 	<ShellCommand
 		Id="report"

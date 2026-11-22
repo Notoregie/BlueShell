@@ -1,9 +1,10 @@
+using BlueShell.Core.Models;
+using BlueShell.Core.State;
 using System;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Threading.Tasks;
-using BlueShell.Core.State;
 
 namespace BlueShell.Commands
 {
@@ -11,7 +12,7 @@ namespace BlueShell.Commands
     {
         protected override void ExecuteLogic(ShellContext context, string[] args)
         {
-            Console.WriteLine("Ips are loading...." + Environment.NewLine);
+            Console.WriteLine("Ips are loading....\n");
             Task.Run(IpConfig).Wait();
         }
 
@@ -44,6 +45,12 @@ namespace BlueShell.Commands
             return Dns.GetHostEntry(Dns.GetHostName())
                 .AddressList
                 .FirstOrDefault(ip => ip.AddressFamily == AddressFamily.InterNetworkV6 && !IPAddress.IsLoopback(ip));
+        }
+
+        protected override void PrintHelp(CommandMetadata metadata)
+        {
+            Console.WriteLine("Usage: ipconfig");
+            base.PrintHelp(metadata);
         }
     }
 }

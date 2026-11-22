@@ -1,5 +1,6 @@
-using System.Net.NetworkInformation;
+using BlueShell.Core.Models;
 using BlueShell.Core.State;
+using System.Net.NetworkInformation;
 
 namespace BlueShell.Commands;
 
@@ -31,5 +32,11 @@ public sealed class PingCommand : ShellCommandBase
         {
             Console.WriteLine($"IP address not found [{ex.Message}]");
         }
+    }
+
+    protected override void PrintHelp(CommandMetadata metadata)
+    {
+        Console.WriteLine("Usage: ping <host>");
+        base.PrintHelp(metadata);
     }
 }

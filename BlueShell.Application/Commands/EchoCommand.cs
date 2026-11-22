@@ -1,7 +1,8 @@
+using BlueShell.Core.Models;
+using BlueShell.Core.State;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using BlueShell.Core.State;
 
 namespace BlueShell.Commands
 {
@@ -15,6 +16,12 @@ namespace BlueShell.Commands
             {
                 Console.WriteLine(arg);
             }
+        }
+
+        protected override void PrintHelp(CommandMetadata metadata)
+        {
+            Console.WriteLine("Usage: echo <text>");
+            base.PrintHelp(metadata);
         }
     }
 }

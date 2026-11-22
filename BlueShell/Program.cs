@@ -3,6 +3,7 @@ using BlueShell.Application.Helper;
 using BlueShell.Core.Interfaces;
 using BlueShell.Core.Models;
 using BlueShell.Core.State;
+using Spectre.Console;
 
 namespace BlueShell.Cli;
 
@@ -15,9 +16,9 @@ internal static class Program
 
         while (true)
         {
-            Decorator.WriteColoredLine($"Mode: {context.CurrentMode}", ConsoleColor.Yellow);
+            ConsoleHelper.WriteColoredLine($"Mode: {context.CurrentMode}", ConsoleColor.Yellow);
             Console.Write(context.WorkingDirectory + ">\t");
-            string userInput = Console.ReadLine() ?? string.Empty;
+            string userInput = Helper.AutoReadLine(XmlShell.Instance.CommandMap.Keys);
             TryExecuteCommand(context, userInput);
         }
     }
@@ -26,7 +27,7 @@ internal static class Program
     {
         XmlShell.Instance.InitializeMetaData();
         Console.Title = "BlueShell";
-        Decorator.ShowTitelbar();
+        ConsoleHelper.ShowTitelbar();
     }
 
     private static void TryExecuteCommand(ShellContext context, string userInput)
@@ -36,10 +37,10 @@ internal static class Program
 
         CommandLine commandLine = CommandParser.Parse(userInput);
 
-        if (XmlShell.Instance.CommandMap.TryGetValue(commandLine.Command, out IShellCommand? shellCommand))
+        if (XmlShell.Instance.CommandMap.TryGetValue(commandLine.Command, out RegisteredCommand? command))
         {
             Console.WriteLine();
-            shellCommand.Execute(context, commandLine);
+            command.Implementation.Execute(context, commandLine, command.Metadata);
         }
         else
         {

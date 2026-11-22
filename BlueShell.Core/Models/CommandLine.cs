@@ -10,8 +10,8 @@ namespace BlueShell.Core.Models
         public static readonly IReadOnlyList<string> HelpAliases = Array.AsReadOnly(new string[] { "?", "help" });
         public string Command { get; }
         public string[] Arguments { get; }
-        public int ArgumentCount => Arguments.Length;
         public bool HelpRequested { get; }
+        public int ArgumentCount => Arguments.Length;
         public CommandLine(string command, string[] arguments, bool helpRequested)
         {
             Command = command;

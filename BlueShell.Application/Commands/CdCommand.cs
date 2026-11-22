@@ -1,3 +1,4 @@
+using BlueShell.Core.Models;
 using BlueShell.Core.State;
 using System;
 using System.Collections.Generic;
@@ -10,7 +11,11 @@ namespace BlueShell.Commands
     {
         protected override int MinArgs => 1;
 
-        protected override void PrintHelp() => Console.WriteLine("cd foldername -> goes to the folder\rcd ..\\ -> goes back one directory\rcd C:\\Users -> jumps directly to this path\rcd \\ -> goes to the root directory of the drive");
+        protected override void PrintHelp(CommandMetadata metadata)
+        {
+            Console.WriteLine("Usage: cd <path>");
+            base.PrintHelp(metadata);
+        }
 
         protected override void ExecuteLogic(ShellContext context, string[] args)
         {

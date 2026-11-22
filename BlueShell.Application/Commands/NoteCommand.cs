@@ -1,12 +1,20 @@
+using BlueShell.Application.Helper;
+using BlueShell.Core.Models;
+using BlueShell.Core.State;
 using System;
 using System.Text;
-using BlueShell.Core.State;
 
 namespace BlueShell.Commands
 {
     public sealed class NoteCommand : ShellCommandBase
     {
         protected override int MinArgs => 2;
+
+        protected override void PrintHelp(CommandMetadata metadata)
+        {
+            ConsoleHelper.WriteColoredLine("Usage: note <filename> <content>", ConsoleColor.Yellow);
+            base.PrintHelp(metadata);
+        }
 
         protected override void ExecuteLogic(ShellContext context, string[] args)
         {
@@ -17,13 +25,13 @@ namespace BlueShell.Commands
 
             using FileStream fs = new(filePath, FileMode.Create, FileAccess.Write);
             fs.Write(bytes, 0, bytes.Length);
+
+            ConsoleHelper.WriteColoredLine($"Note saved to {filePath}", ConsoleColor.Green);
         }
 
         private static string EnsureTxtExtension(string fileName)
         {
-            return fileName.EndsWith(".txt", StringComparison.OrdinalIgnoreCase)
-                ? fileName
-                : fileName + ".txt";
+            return Path.ChangeExtension(fileName, ".txt");
         }
     }
 }

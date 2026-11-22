@@ -1,8 +1,9 @@
-﻿using System.Reflection;
-using System.Xml.Serialization;
+﻿using BlueShell.Application.Helper;
 using BlueShell.Commands;
 using BlueShell.Core.Interfaces;
-using BlueShell.Application.Helper;
+using BlueShell.Core.Models;
+using System.Reflection;
+using System.Xml.Serialization;
 
 namespace BlueShell.Application.Configuration;
 
@@ -14,7 +15,7 @@ public sealed class XmlShell
     public List<ShellCommand> ShellCommands { get; set; } = new();
 
     [XmlIgnore]
-    public Dictionary<string, IShellCommand> CommandMap { get; set; } = new();
+    public Dictionary<string, RegisteredCommand> CommandMap { get; set; } = new();
 
     private static XmlShell LoadConfig()
     {
@@ -26,7 +27,11 @@ public sealed class XmlShell
         foreach (var command in ShellCommands)
         {
             command.SetCommand();
-            CommandMap[command.Id] = command.Command;
+            CommandMap[command.Id] = new RegisteredCommand
+            {
+                Metadata = new CommandMetadata(command.Id, command.Type, command.Summary),
+                Implementation = command.Command
+            };
         }
     }
 }

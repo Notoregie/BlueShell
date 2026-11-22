@@ -1,16 +1,21 @@
 using BlueShell.Application.Configuration;
-using BlueShell.Core.State;
 using BlueShell.Core;
+using BlueShell.Core.Models;
+using BlueShell.Core.State;
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Linq;
+using System.Text;
 
 namespace BlueShell.Commands
 {
     public sealed class HelpCommand : ShellCommandBase
     {
-        protected override void PrintHelp() => Console.WriteLine("Stupid?");
+        protected override void PrintHelp(CommandMetadata metadata)
+        {
+            Console.WriteLine("Usage: help");
+            base.PrintHelp(metadata);
+        }
         protected override void ExecuteLogic(ShellContext context, string[] args)
         {
             Console.WriteLine("A list of all Commands:\n");

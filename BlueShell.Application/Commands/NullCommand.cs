@@ -9,7 +9,7 @@ namespace BlueShell.Commands
     {
         protected override void ExecuteLogic(ShellContext context, string[] args)
         {
-            Console.WriteLine("NullCommand Executed.");
+            Console.WriteLine("NullCommand executed.");
         }
     }
 }

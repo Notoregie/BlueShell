@@ -1,3 +1,5 @@
+using BlueShell.Application.Configuration;
+using BlueShell.Application.Helper;
 using BlueShell.Core.Interfaces;
 using BlueShell.Core.Models;
 using BlueShell.Core.State;
@@ -11,11 +13,11 @@ namespace BlueShell.Commands
     {
         protected virtual int MinArgs => 0;
 
-        public void Execute(ShellContext context, CommandLine commandLine)
+        public void Execute(ShellContext context, CommandLine commandLine, CommandMetadata metadata)
         {
             if (commandLine.HelpRequested)
             {
-                PrintHelp();
+                PrintHelp(metadata);
                 return;
             }
 
@@ -25,9 +27,9 @@ namespace BlueShell.Commands
             ExecuteLogic(context, commandLine.Arguments);
         }
 
-        protected virtual void PrintHelp()
+        protected virtual void PrintHelp(CommandMetadata metadata)
         {
-            Console.WriteLine("No help implemented");
+            Console.WriteLine(metadata.Summary);
         }
 
         protected virtual void ExecuteLogic(ShellContext context, string[] args)
@@ -42,13 +44,13 @@ namespace BlueShell.Commands
 
             if (args.Length < MinArgs)
             {
-                Console.WriteLine("Too few arguments. Necessary arguments: " + MinArgs);
+                ConsoleHelper.WriteErrorLine("Too few arguments. Necessary arguments: " + MinArgs);
                 return false;
             }
 
             if (args.Any(string.IsNullOrWhiteSpace))
             {
-                Console.WriteLine("Arguments must not be empty.");
+                ConsoleHelper.WriteErrorLine("Arguments must not be empty.");
                 return false;
             }
 

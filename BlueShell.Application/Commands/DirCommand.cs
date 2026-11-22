@@ -1,3 +1,4 @@
+using BlueShell.Core.Models;
 using BlueShell.Core.State;
 using System;
 using System.Collections.Generic;
@@ -7,7 +8,11 @@ namespace BlueShell.Commands
 {
     public sealed class DirCommand : ShellCommandBase
     {
-        protected override void PrintHelp() => Console.WriteLine("lists all directories from the directory on");
+        protected override void PrintHelp(CommandMetadata metadata)
+        {
+            Console.WriteLine("Usage: dir");
+            base.PrintHelp(metadata);
+        }
 
         protected override void ExecuteLogic(ShellContext context, string[] args)
         {
