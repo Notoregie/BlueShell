@@ -20,7 +20,7 @@ jobs:
           dotnet-version: 8.0.x
 
       - name: Restore
-        run: dotnet restore Blueshell.slnx
+        run: dotnet restore Blueshell.sln
 
       - name: Build
         run: dotnet build Blueshell.slnx --configuration Release --no-restore
