@@ -1,4 +1,3 @@
-using BlueShell.Application.Configuration;
 using BlueShell.Core.Attributes;
 using BlueShell.Core.Interfaces;
 using BlueShell.Core.Models;

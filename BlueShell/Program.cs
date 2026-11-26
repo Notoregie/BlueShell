@@ -1,6 +1,5 @@
 ﻿using BlueShell.Application;
 using BlueShell.Application.Commands;
-using BlueShell.Application.Configuration;
 using BlueShell.Application.Helper;
 using BlueShell.Commands;
 using BlueShell.Core.Interfaces;
