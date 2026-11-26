@@ -1,54 +1,46 @@
 using BlueShell.Application.Configuration;
-using BlueShell.Core;
+using BlueShell.Core.Attributes;
+using BlueShell.Core.Interfaces;
 using BlueShell.Core.Models;
 using BlueShell.Core.State;
-using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace BlueShell.Commands
 {
-    public sealed class HelpCommand : ShellCommandBase
+    [Command("help", "Lists all registered commands.", "help")]
+    public sealed class HelpCommand : IShellCommand
     {
-        protected override void PrintHelp(CommandMetadata metadata)
+        private readonly Func<IEnumerable<RegisteredCommand>> _commandProvider;
+
+        public HelpCommand(Func<IEnumerable<RegisteredCommand>> commandProvider)
         {
-            Console.WriteLine("Usage: help");
-            base.PrintHelp(metadata);
-        }
-        protected override void ExecuteLogic(ShellContext context, string[] args)
-        {
-            Console.WriteLine("A list of all Commands:\n");
-
-            var defaultCommands = XmlShell.Instance.ShellCommands
-                .OrderBy(x => x.Id)
-                .Where(x => x.Type == "default");
-
-            var customCommands = XmlShell.Instance.ShellCommands
-                .OrderBy(x => x.Id)
-                .Where(x => x.Type == "custom");
-
-            ShowList(defaultCommands);
-            ShowList(customCommands);
+            _commandProvider = commandProvider;
         }
 
-        private static void ShowList(IEnumerable<ShellCommand> list)
+        public int MinArgs => 0;
+        public void Execute(ShellContext context, string[] args)
         {
-            var type = list.Select(x => x.Type).FirstOrDefault();
-            if (string.IsNullOrEmpty(type))
-                return;
+            var commands = _commandProvider().ToLookup(command => command.Source);
+            Console.WriteLine("A list of all Commands:");
 
-            Console.WriteLine($"{char.ToUpper(type[0]) + type[1..]} commands:\n");
-
-            foreach (var command in list)
+            foreach (IGrouping<string, RegisteredCommand> group in commands)
             {
-                string id = command.Id.ToUpper().PadRight(15);
-                string summary = command.Summary.PadRight(50);
-                string implemented = (command.Command is not NullCommand).ToString();
-                Console.WriteLine($"{id}{summary} Implemented: {implemented}");
+                Console.WriteLine();
+                ShowList(group);
             }
+        }
 
-            Console.WriteLine("\n");
+        private static void ShowList(IGrouping<string, RegisteredCommand> group)
+        {
+            Console.WriteLine($"{group.Key} commands:\n");
+
+            foreach (var command in group)
+            {
+                string id = command.Metadata.Id.ToUpper().PadRight(15);
+                string description = command.Metadata.Description.PadRight(50);
+                string implementation = (command.Implementation is not NullCommand).ToString();
+                Console.WriteLine($"{id}{description} Implemented: {implementation}");
+            }
         }
     }
 }

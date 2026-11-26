@@ -1,20 +1,16 @@
+using BlueShell.Core.Attributes;
+using BlueShell.Core.Interfaces;
 using BlueShell.Core.Models;
 using BlueShell.Core.State;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace BlueShell.Commands
 {
-    public sealed class DirCommand : ShellCommandBase
+    [Command("dir", "Lists top-level directories.", "dir")]
+    public sealed class DirCommand : IShellCommand, IDetailedHelpProvider
     {
-        protected override void PrintHelp(CommandMetadata metadata)
-        {
-            Console.WriteLine("Usage: dir");
-            base.PrintHelp(metadata);
-        }
+        public int MinArgs => 0;
 
-        protected override void ExecuteLogic(ShellContext context, string[] args)
+        public void Execute(ShellContext context, string[] args)
         {
             foreach (var topDir in Directory.GetDirectories(context.WorkingDirectory, "*", SearchOption.TopDirectoryOnly))
             {
@@ -22,5 +18,10 @@ namespace BlueShell.Commands
                 Console.WriteLine("{0,-30} [{1}]", folderName, topDir);
             }
         }
+
+        public CommandHelp GetDetailedHelp() => new(
+            "dir",
+            "Lists only the directories directly inside the current working directory.",
+            Notes: ["The current working directory is managed by the cd command."]);
     }
 }

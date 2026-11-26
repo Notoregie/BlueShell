@@ -1,14 +1,17 @@
+using BlueShell.Core.Attributes;
+using BlueShell.Core.Interfaces;
 using BlueShell.Core.Models;
 using BlueShell.Core.State;
 using System.Net.NetworkInformation;
 
 namespace BlueShell.Commands;
 
-public sealed class PingCommand : ShellCommandBase
+ [Command("ping", "Sends a ping request to a hostname or IP address.", "ping <host>")]
+ public sealed class PingCommand : IShellCommand, IDetailedHelpProvider
 {
-    protected override int MinArgs => 1;
+    public int MinArgs => 1;
 
-    protected override void ExecuteLogic(ShellContext context, string[] args)
+    public void Execute(ShellContext context, string[] args)
     {
         string url = args[0];
 
@@ -34,9 +37,9 @@ public sealed class PingCommand : ShellCommandBase
         }
     }
 
-    protected override void PrintHelp(CommandMetadata metadata)
-    {
-        Console.WriteLine("Usage: ping <host>");
-        base.PrintHelp(metadata);
-    }
+    public CommandHelp GetDetailedHelp() => new(
+        "ping <host>",
+        "Sends one ICMP ping request to a hostname or IP address.",
+        Examples: ["ping example.com", "ping 127.0.0.1"],
+        Notes: ["The target must be reachable and allow ICMP requests."]);
 }

@@ -1,16 +1,16 @@
+using BlueShell.Core.Attributes;
+using BlueShell.Core.Interfaces;
 using BlueShell.Core.Models;
 using BlueShell.Core.State;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace BlueShell.Commands
 {
-    public class EchoCommand : ShellCommandBase
+    [Command("echo", "Writes the provided text to the console.", "echo <text>")]
+    public sealed class EchoCommand : IShellCommand, IDetailedHelpProvider
     {
-        protected override int MinArgs => 1;
+        public int MinArgs => 1;
 
-        protected override void ExecuteLogic(ShellContext context, string[] args)
+        public void Execute(ShellContext context, string[] args)
         {
             foreach (string arg in args)
             {
@@ -18,10 +18,9 @@ namespace BlueShell.Commands
             }
         }
 
-        protected override void PrintHelp(CommandMetadata metadata)
-        {
-            Console.WriteLine("Usage: echo <text>");
-            base.PrintHelp(metadata);
-        }
+        public CommandHelp GetDetailedHelp() => new(
+            "echo <text>",
+            "Writes each provided argument on a separate line.",
+            Examples: ["echo Hello world"]);
     }
 }

@@ -1,3 +1,5 @@
+using BlueShell.Core.Attributes;
+using BlueShell.Core.Interfaces;
 using BlueShell.Core.Models;
 using BlueShell.Core.State;
 using System;
@@ -8,9 +10,12 @@ using System.Threading.Tasks;
 
 namespace BlueShell.Commands
 {
-    public sealed class IpconfigCommand : ShellCommandBase
+    [Command("ipconfig", "Shows your IP configuration", "ipconfig")]
+    public sealed class IpconfigCommand : IShellCommand, IDetailedHelpProvider
     {
-        protected override void ExecuteLogic(ShellContext context, string[] args)
+        public int MinArgs => 0;
+
+        public void Execute(ShellContext context, string[] args)
         {
             Console.WriteLine("Ips are loading....\n");
             Task.Run(IpConfig).Wait();
@@ -47,10 +52,9 @@ namespace BlueShell.Commands
                 .FirstOrDefault(ip => ip.AddressFamily == AddressFamily.InterNetworkV6 && !IPAddress.IsLoopback(ip));
         }
 
-        protected override void PrintHelp(CommandMetadata metadata)
-        {
-            Console.WriteLine("Usage: ipconfig");
-            base.PrintHelp(metadata);
-        }
+        public CommandHelp GetDetailedHelp() => new(
+            "ipconfig",
+            "Shows the local IPv4 address, IPv6 address, and public IP address.",
+            Notes: ["The public IP address is retrieved from an external service."]);
     }
 }

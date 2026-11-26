@@ -1,5 +1,8 @@
-﻿using BlueShell.Application.Configuration;
+﻿using BlueShell.Application;
+using BlueShell.Application.Commands;
+using BlueShell.Application.Configuration;
 using BlueShell.Application.Helper;
+using BlueShell.Commands;
 using BlueShell.Core.Interfaces;
 using BlueShell.Core.Models;
 using BlueShell.Core.State;
@@ -12,41 +15,37 @@ internal static class Program
     public static void Main(string[] args)
     {
         var context = new ShellContext();
+        var registry = new CommandRegistry(typeof(CommandExecutor).Assembly);
         StartUp();
 
         while (true)
         {
-            ConsoleHelper.WriteColoredLine($"Mode: {context.CurrentMode}", ConsoleColor.Yellow);
+            ConsoleHelper.WriteColoredLine($"\nMode: {context.CurrentMode}", ConsoleColor.Yellow);
             Console.Write(context.WorkingDirectory + ">\t");
-            string userInput = Helper.AutoReadLine(XmlShell.Instance.CommandMap.Keys);
-            TryExecuteCommand(context, userInput);
+            string userInput = Helper.AutoReadLine(registry.Commands.Keys);
+
+            if (string.IsNullOrWhiteSpace(userInput))
+            {
+                ConsoleHelper.WriteErrorLine("No command entered. Please enter a command.");
+                continue;
+            }
+
+            CommandLine commandLine = CommandParser.Parse(userInput);
+
+            if (!registry.TryGetCommand(commandLine.Command, out var registeredCommand))
+            {
+                ConsoleHelper.WriteErrorLine($"Command '{commandLine.Command}' not found.");
+                continue;
+            }
+
+            Console.WriteLine();
+            CommandExecutor.ExecuteCommand(registeredCommand, context, commandLine);
         }
     }
 
     private static void StartUp()
     {
-        XmlShell.Instance.InitializeMetaData();
         Console.Title = "BlueShell";
         ConsoleHelper.ShowTitelbar();
-    }
-
-    private static void TryExecuteCommand(ShellContext context, string userInput)
-    {
-        if (string.IsNullOrWhiteSpace(userInput))
-            return;
-
-        CommandLine commandLine = CommandParser.Parse(userInput);
-
-        if (XmlShell.Instance.CommandMap.TryGetValue(commandLine.Command, out RegisteredCommand? command))
-        {
-            Console.WriteLine();
-            command.Implementation.Execute(context, commandLine, command.Metadata);
-        }
-        else
-        {
-            Console.WriteLine($"The command named '{commandLine.Command}' could not be found.");
-        }
-
-        Console.WriteLine();
     }
 }

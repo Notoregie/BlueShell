@@ -6,6 +6,14 @@ namespace BlueShell.Application.Helper
 {
     public static class ConsoleHelper
     {
+        #region Color Constants
+        public static readonly ConsoleColor DefaultColor = ConsoleColor.White;
+        public static readonly ConsoleColor ErrorColor = ConsoleColor.Red;
+        public static readonly ConsoleColor WarningColor = ConsoleColor.Yellow;
+        public static readonly ConsoleColor SuccessColor = ConsoleColor.Green;
+        public static readonly ConsoleColor InfoColor = ConsoleColor.Cyan;
+
+        #endregion
         public static void WriteColoredLine(string input, ConsoleColor color)
         {
             ConsoleColor previousColor = Console.ForegroundColor;
@@ -25,16 +33,16 @@ namespace BlueShell.Application.Helper
         public static void ShowTitelbar()
         {
             WriteColoredLine("BlueShell [Version 0.7]\n(c) Notoregy Corporation. All rights reserved.\n", ConsoleColor.Blue);
-            WriteColoredLine("Type 'help' to show all commands.\n", ConsoleColor.Green);
+            WriteColoredLine("Type 'help' to show all commands.", ConsoleColor.Green);
         }
 
-        public static void WriteErrorLine(string message) => WriteColoredLine(message, ConsoleColor.Red);
+        public static void WriteErrorLine(string message) => WriteColoredLine(message, ErrorColor);
 
-        public static void WriteWarningLine(string message) => WriteColoredLine(message, ConsoleColor.Yellow);
+        public static void WriteWarningLine(string message) => WriteColoredLine(message, WarningColor);
 
-        public static void WriteSuccessLine(string message) => WriteColoredLine(message, ConsoleColor.Green);
+        public static void WriteSuccessLine(string message) => WriteColoredLine(message, SuccessColor);
 
-        public static void WriteInfoLine(string message) => WriteColoredLine(message, ConsoleColor.Cyan);
+        public static void WriteInfoLine(string message) => WriteColoredLine(message, InfoColor);
 
         public static string Bold(string input) => $"\x1b[1m{input}\x1b[0m";
         public static string Underline(string input) => $"\x1b[4m{input}\x1b[0m";

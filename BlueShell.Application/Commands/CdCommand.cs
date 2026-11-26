@@ -1,23 +1,20 @@
+using BlueShell.Core.Attributes;
+using BlueShell.Core.Interfaces;
 using BlueShell.Core.Models;
 using BlueShell.Core.State;
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Input;
 
 namespace BlueShell.Commands
 {
-    public sealed class CdCommand : ShellCommandBase
+    [Command(
+        "cd", 
+        "Changes the current working directory.", 
+        "cd <path>")]
+    public sealed class CdCommand : IShellCommand, IDetailedHelpProvider
     {
-        protected override int MinArgs => 1;
+        public int MinArgs => 1;
 
-        protected override void PrintHelp(CommandMetadata metadata)
-        {
-            Console.WriteLine("Usage: cd <path>");
-            base.PrintHelp(metadata);
-        }
-
-        protected override void ExecuteLogic(ShellContext context, string[] args)
+        public void Execute(ShellContext context, string[] args)
         {
             string newDir = args[0];
 
@@ -39,6 +36,12 @@ namespace BlueShell.Commands
                 Console.WriteLine("Directory couldn't be found.");
             }
         }
+
+        public CommandHelp GetDetailedHelp() => new(
+            "cd <path>",
+            "Changes the current working directory to an absolute or relative path.",
+            Examples: ["cd C:\\Projects", "cd .\\src", "cd .."],
+            Notes: ["Use '..' to move to the parent directory."]);
 
         private static bool TryParsePaths(string currentDir, string newDir, out string updatedDir)
         {

@@ -5,5 +5,6 @@ namespace BlueShell.Core.Interfaces;
 
 public interface IShellCommand
 {
-    void Execute(ShellContext context, CommandLine commandLine, CommandMetadata metadata);
+    int MinArgs { get; }
+    void Execute(ShellContext context, string[] args);
 }

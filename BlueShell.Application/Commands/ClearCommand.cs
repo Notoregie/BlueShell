@@ -1,20 +1,15 @@
-using BlueShell.Core.Models;
+using BlueShell.Core.Attributes;
+using BlueShell.Core.Interfaces;
 using BlueShell.Core.State;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace BlueShell.Commands
 {
-    public sealed class ClearCommand : ShellCommandBase
+    [Command("clear", "Clears the console screen.", "clear")]
+    public sealed class ClearCommand : IShellCommand
     {
-        protected override void PrintHelp(CommandMetadata metadata)
-        {
-            Console.WriteLine("Usage: clear");
-            base.PrintHelp(metadata);
-        }
+        public int MinArgs => 0;
 
-        protected override void ExecuteLogic(ShellContext context, string[] args)
+        public void Execute(ShellContext context, string[] args)
         {
             Console.Clear();
         }

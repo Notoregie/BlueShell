@@ -4,8 +4,8 @@ using System.Text;
 
 namespace BlueShell.Core.Models
 {
-    public sealed record CommandMetadata(
-        string Id,
-        string Type,
-        string Summary);
+    //public sealed record CommandMetadata(
+    //    string Id,
+    //    string Type,
+    //    string Summary);
 }
