@@ -6,7 +6,8 @@
   </Folder>
   <Project Path="BlueShell.Application/BlueShell.Application.csproj" />
   <Project Path="BlueShell.Analyze/BlueShell.Analyze.csproj" />
-  <Project Path="tests/BlueShell.Core.Tests/BlueShell.Core.Tests.csproj" />
-  <Project Path="tests/BlueShell.Application.Tests/BlueShell.Application.Tests.csproj" />
   <File Path="README.md" />
+  <Project Path="tests/BlueShell.Analyze.Tests/BlueShell.Analyze.Tests.csproj" />
+  <Project Path="tests/BlueShell.Application.Tests/BlueShell.Application.Tests.csproj" />
+  <Project Path="tests/BlueShell.Core.Tests/BlueShell.Core.Tests.csproj" />
 </Solution>

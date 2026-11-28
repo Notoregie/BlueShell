@@ -19,7 +19,7 @@ namespace BlueShell.Analyze
             "system"
         );
 
-        private static readonly DiagnosticDescriptor Rule = new DiagnosticDescriptor(
+        private static readonly DiagnosticDescriptor BlockedIdRule = new DiagnosticDescriptor(
             id: "BS001",
             title: "Blocked Command Id",
             messageFormat: "The command id '{0}' is blocked and cannot be used.",
@@ -27,7 +27,16 @@ namespace BlueShell.Analyze
             defaultSeverity: DiagnosticSeverity.Error,
             isEnabledByDefault: true);
 
-        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics => ImmutableArray.Create(Rule);
+        private static readonly DiagnosticDescriptor EmptyOrWhiteSpaceIdRule = new DiagnosticDescriptor(
+            id: "BS002",
+            title: "Empty or White Space Command Id",
+            messageFormat: "The command id is empty or contains only white space.",
+            category: "Usage",
+            defaultSeverity: DiagnosticSeverity.Error,
+            isEnabledByDefault: true);
+
+        public override ImmutableArray<DiagnosticDescriptor> SupportedDiagnostics =>
+            ImmutableArray.Create(BlockedIdRule, EmptyOrWhiteSpaceIdRule);
 
         public override void Initialize(AnalysisContext context)
         {
@@ -36,12 +45,21 @@ namespace BlueShell.Analyze
 
             context.EnableConcurrentExecution();
 
-            context.RegisterSymbolAction(
-                AnalyzeNamedType,
-                SymbolKind.NamedType);
+            context.RegisterCompilationStartAction(compilationContext =>
+            {
+                INamedTypeSymbol? commandAttributeSymbol =
+                    compilationContext.Compilation.GetTypeByMetadataName(CommandAttributeMetadataName);
+
+                if (commandAttributeSymbol is null)
+                    return;
+
+                compilationContext.RegisterSymbolAction(symbolContext => 
+                    AnalyzeNamedType(symbolContext, commandAttributeSymbol), 
+                    SymbolKind.NamedType);
+            });
         }
 
-        private static void AnalyzeNamedType(SymbolAnalysisContext context)
+        private static void AnalyzeNamedType(SymbolAnalysisContext context, INamedTypeSymbol commandAttributeSymbol)
         {
             if (context.Symbol is not INamedTypeSymbol typeSymbol)
                 return;
@@ -49,10 +67,7 @@ namespace BlueShell.Analyze
             AttributeData? commandAttribute =
                 typeSymbol.GetAttributes()
                     .FirstOrDefault(attribute =>
-                        string.Equals(
-                            attribute.AttributeClass?.ToDisplayString(),
-                            CommandAttributeMetadataName,
-                            StringComparison.Ordinal));
+                        SymbolEqualityComparer.Default.Equals(attribute.AttributeClass, commandAttributeSymbol));
 
             if (commandAttribute is null)
                 return;
@@ -65,16 +80,26 @@ namespace BlueShell.Analyze
             if (idArgument.Value is not string commandId)
                 return;
 
-            if (!BlockedIds.Contains(commandId))
-                return;
-
             Location location = commandAttribute.ApplicationSyntaxReference?.GetSyntax(
                     context.CancellationToken).GetLocation()
                 ?? typeSymbol.Locations[0];
 
+            if (string.IsNullOrWhiteSpace(commandId))
+            {
+                context.ReportDiagnostic(
+                    Diagnostic.Create(
+                        EmptyOrWhiteSpaceIdRule,
+                        location));
+
+                return;
+            }
+
+            if (!BlockedIds.Contains(commandId))
+                return;
+
             context.ReportDiagnostic(
                 Diagnostic.Create(
-                    Rule,
+                    BlockedIdRule,
                     location,
                     commandId));
         }
