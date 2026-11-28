@@ -2,8 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using BlueShell.Application.Helper;
 
-namespace BlueShell.Application.Helper
+namespace BlueShell.Application.Parsing
 {
     public static class CommandParser
     {
@@ -23,7 +24,7 @@ namespace BlueShell.Application.Helper
                     return new CommandLine(command, Array.Empty<string>(), true);
 
                 string[] rawArguments = ParseArguments(input);
-                string[] expandedArguments = Helper.ExpandEnvironmentVariables(true, rawArguments);
+                string[] expandedArguments = EnviromentVariableExpander.ExpandEnvironmentVariables(true, rawArguments);
 
                 return new CommandLine(command, expandedArguments, false);
             }

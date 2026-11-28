@@ -1,6 +1,7 @@
-﻿using BlueShell.Application;
-using BlueShell.Application.Commands;
+﻿using BlueShell.Application.Commands;
+using BlueShell.Application.Execution;
 using BlueShell.Application.Helper;
+using BlueShell.Application.Parsing;
 using BlueShell.Commands;
 using BlueShell.Core.Interfaces;
 using BlueShell.Core.Models;
@@ -21,7 +22,7 @@ internal static class Program
         {
             ConsoleHelper.WriteColoredLine($"\nMode: {context.CurrentMode}", ConsoleColor.Yellow);
             Console.Write(context.WorkingDirectory + ">\t");
-            string userInput = Helper.AutoReadLine(registry.Commands.Keys);
+            string userInput = InputHelper.AutoReadLine(registry.Commands.Keys);
 
             if (string.IsNullOrWhiteSpace(userInput))
             {

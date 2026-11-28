@@ -7,7 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace BlueShell.Application
+namespace BlueShell.Application.Execution
 {
     public static class CommandExecutor
     {

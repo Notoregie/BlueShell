@@ -46,5 +46,7 @@ namespace BlueShell.Application.Helper
 
         public static string Bold(string input) => $"\x1b[1m{input}\x1b[0m";
         public static string Underline(string input) => $"\x1b[4m{input}\x1b[0m";
+
+
     }
 }
